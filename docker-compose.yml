@@ -1,0 +1,79 @@
+version: '3.1'
+
+services:
+  client: 
+    build: 
+      context: ./client
+      dockerfile: dockerfile # Указываем путь к Dockerfile
+    ports:
+      - "3030:3030"
+    depends_on:
+      - db
+      
+    environment:
+      USER_SERVICE_HOST: user_service
+      USER_SERVICE_PORT: 9999
+      COMMENT_SERVICE_HOST: comment_service
+      COMMENT_SERVICE_PORT: 9998
+
+    networks:
+      - backend
+
+  user_service: 
+    build: 
+      context: ./users
+      dockerfile: dockerfile # Указываем путь к Dockerfile
+      
+    environment:
+      jwt_secret: SECRET
+      
+    ports:
+      - "9999:9999"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  comment_service: 
+    build: 
+      context: ./users
+      dockerfile: dockerfile # Указываем путь к Dockerfile
+      
+    ports:
+      - "9998:9998"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+    volumes:
+      - ./containers/mysql:/var/lib/mysql
+
+      
+    networks:
+      - backend
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+      
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+
+
