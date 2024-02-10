@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Comment } from 'src/entities/comment.entity';
 import { CreateCommentDto } from './dto/createCommentDto';
 import { Repository } from 'typeorm';
@@ -21,22 +21,25 @@ export class CommentService {
       const commentdb = await this.commentRepository.findOne({ where: { id: updateCommentDto.id } });
 
       if (!commentdb)
-         return { status: 'error', message: 'Not found comment with this id' };
+         throw new NotFoundException('Not found comment with this id');
 
       if (commentdb.userId != updateCommentDto.userId)
-         return { status: 'error', message: 'No permission' };
+         throw new ForbiddenException('No permission');
 
-      return await this.commentRepository.update(updateCommentDto.id, { comment: updateCommentDto.comment });
+      return await this.commentRepository.save({
+         id: updateCommentDto.id,
+         comment: updateCommentDto.comment
+      });
    }
 
    async delete(id: number, userId: number, role: string) {
       const commentdb = await this.commentRepository.findOne({ where: { id } });
 
       if (!commentdb)
-         return { status: 'error', message: 'Not found comment with this id' };
+         throw new NotFoundException('Not found comment with this id');
 
       if (commentdb.userId != userId && role != 'admin')
-         return { status: 'error', message: 'No permission' };
+         throw new ForbiddenException('No permission');
 
       return await this.commentRepository.delete(id);
    }

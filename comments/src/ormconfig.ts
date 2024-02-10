@@ -3,6 +3,7 @@ import { Comment } from "./entities/comment.entity";
 
 const config: TypeOrmModuleOptions = {
    type: 'mysql',
+  //  host: 'localhost',
    host: 'db',
    port: 3306,
    username: 'root',

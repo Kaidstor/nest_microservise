@@ -10,7 +10,10 @@ export class UserService {
    constructor(@InjectRepository(User) private userRepository: Repository<User>){}
 
    async findOne(id: number){
-      return await this.userRepository.findOne({where: {id}});
+      const info = await this.userRepository.findOne({where: {id}});
+      
+      delete info.password;
+      return info;
    }
 
    async find(){

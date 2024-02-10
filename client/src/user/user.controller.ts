@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Headers, Inject, UnauthorizedException } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Headers, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -8,12 +8,8 @@ export class UserController {
 
    @Get('/me')
    async me(@Headers() headers) {
-      const token = headers.authorization?.split(' ')[1];
-      if (!token) {
-         throw new UnauthorizedException();
-      }
       try {
-         const response = await lastValueFrom(this.client.send({ cmd: 'getme' }, { accessToken: token }));
+         const response = await lastValueFrom(this.client.send({ cmd: 'getme' }, { accessToken: headers.authorization?.split(' ')[1] }));
          return response
       } catch (error) {
          console.log(error)
@@ -23,12 +19,8 @@ export class UserController {
 
    @Get('/')
    async all(@Headers() headers) {
-      const token = headers.authorization?.split(' ')[1];
-      if (!token) {
-         throw new UnauthorizedException();
-      }
       try {
-         return this.client.send({ cmd: 'users_all' }, { accessToken: token });
+         return this.client.send({ cmd: 'users_all' }, { accessToken: headers.authorization?.split(' ')[1] });
       } catch (error) {
          return new ForbiddenException();
       }

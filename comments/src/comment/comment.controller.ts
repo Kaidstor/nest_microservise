@@ -8,7 +8,6 @@ import { UpdateCommentDto } from './dto/updateCommentDto';
 export class CommentController {
    constructor(private readonly commentService: CommentService) { }
 
-
    @MessagePattern({ cmd: 'create_comment' })
    create(@Payload() createCommentDto: CreateCommentDto) {
       return this.commentService.create(createCommentDto);
@@ -25,11 +24,7 @@ export class CommentController {
    }
 
    @MessagePattern({ cmd: 'user_comments' })
-   async getUserComments(@Payload() user: { userId: number }) {
-      try {
-         return await this.commentService.findByUserId(user.userId);
-      } catch (e) {
-         return { status: 'error', message: 'something went wrong' };
-      }
+   async getUserComments(@Payload() user: { userId: number, role: string }) {
+      return await this.commentService.findByUserId(user.userId);
    }
 }
