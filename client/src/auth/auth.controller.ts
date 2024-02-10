@@ -2,6 +2,7 @@ import { Body, Controller, Headers, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/createUserDto';
 import { LoginDto } from './dto/loginDto';
+import { RefreshTokenDto } from './dto/refreshTokenDto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +19,7 @@ export class AuthController {
    }
 
    @Post('/refresh')
-   refresh(@Headers() headers) {
+   refresh(@Headers() headers, @Body() body: RefreshTokenDto) {
       return this.client.send({ cmd: 'refresh' }, { refresh: headers.authorization.split(' ')[1] });
    }
 }
