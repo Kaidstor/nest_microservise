@@ -5,17 +5,16 @@ services:
     build: 
       context: ./client
       dockerfile: dockerfile # Указываем путь к Dockerfile
-    ports:
-      - "3030:3030"
+      
+    env_file:
+      - ./client/.env
+
     depends_on:
       - db_users
       - db_comments
-      
-    environment:
-      USER_SERVICE_HOST: user_service
-      USER_SERVICE_PORT: 9999
-      COMMENT_SERVICE_HOST: comment_service
-      COMMENT_SERVICE_PORT: 9998
+
+    ports:
+      - "3030:3030" # Проброс портов с хоста на контейнер
 
     networks:
       - backend
@@ -25,8 +24,9 @@ services:
       context: ./users
       dockerfile: dockerfile # Указываем путь к Dockerfile
       
-    environment:
-      jwt_secret: SECRET
+    
+    env_file:
+      - ./users/.env
       
     ports:
       - "9999:9999"
@@ -41,6 +41,9 @@ services:
       context: ./comments
       dockerfile: dockerfile # Указываем путь к Dockerfile
       
+    env_file:
+      - ./comments/.env
+
     ports:
       - "9998:9998"
     depends_on:

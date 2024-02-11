@@ -19,7 +19,7 @@ export class UserController {
    @UseGuards(JwtGuard, RolesGuard)
    @Roles('admin')
    @MessagePattern({ cmd: 'users_all' }) 
-   async all(@Payload() req) {
+   async all() {
       return await this.userService.find();
    }
 }

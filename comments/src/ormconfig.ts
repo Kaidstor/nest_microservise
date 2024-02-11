@@ -4,11 +4,11 @@ import { Comment } from "./entities/comment.entity";
 const config: TypeOrmModuleOptions = {
    type: 'mysql',
   //  host: 'localhost',
-   host: 'db_comments',
-   port: 3306,
-   username: 'root',
-   password: 'example',
-   database: 'comment',
+   host: process.env.HOST, 
+   port: +process.env.PORT,
+   username: process.env.USERNAME,
+   password: process.env.PASSWORD,
+   database: process.env.DATABASE,
    entities: [Comment],
    synchronize: true,
  }

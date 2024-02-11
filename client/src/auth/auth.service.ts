@@ -1,6 +1,9 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { LoginDto } from './dto/loginDto';
+import { CreateUserDto } from './dto/createUserDto';
+import { RefreshTokenDto } from './dto/refreshTokenDto';
 
 @Injectable()
 export class AuthService {
@@ -15,5 +18,18 @@ export class AuthService {
       }
 
       return user && { id: user.id, role: user.role }
+   }
+
+   
+   async login(body: LoginDto) {
+      return this.client.send({ cmd: 'login' }, body);
+   }
+
+   async register(body: CreateUserDto) {
+      return this.client.send({ cmd: 'register' }, body);
+   }
+
+   refresh(body: RefreshTokenDto) {
+      return this.client.send({ cmd: 'refresh' }, body);
    }
 }

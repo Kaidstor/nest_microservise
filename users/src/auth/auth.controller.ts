@@ -4,13 +4,12 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { CreateUserDto } from 'src/user/dto/createUserDto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { JwtService } from '@nestjs/jwt';
 import { JwtRefreshGuard } from './guards/jwt_refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
 
-   constructor(private authService: AuthService, private userService: UserService, private jwtService: JwtService) { }
+   constructor(private authService: AuthService, private userService: UserService) { }
 
    @UseGuards(LocalAuthGuard)
    @MessagePattern({ cmd: 'login' })

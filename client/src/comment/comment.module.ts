@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthorizationStrategy } from 'src/auth/strategies/auth-strategy';
+import { CommentService } from './comment.service';
 
 @Module({
   imports: [ConfigModule.forRoot()],
@@ -34,6 +35,7 @@ import { AuthorizationStrategy } from 'src/auth/strategies/auth-strategy';
             port: configService.get('USER_SERVICE_PORT'),
           },
         }),
-    }]
+    },
+    CommentService]
 })
 export class CommentModule { }

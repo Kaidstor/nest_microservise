@@ -2,21 +2,22 @@ import { Controller, ForbiddenException, Get, Headers, Inject } from '@nestjs/co
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { lastValueFrom } from 'rxjs';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-   constructor(@Inject('AUTH_SERVICE') private client: ClientProxy) { }
+   constructor(private readonly userService: UserService) {}
 
-   @ApiBearerAuth()
+   @ApiBearerAuth('access-token')
    @Get('/me')
    me(@Headers() headers) {
-      return this.client.send({ cmd: 'getme' }, { accessToken: headers.authorization?.split(' ')[1] })
+      return this.userService.me(headers.authorization?.split(' ')[1])
    }
 
    @ApiOperation({ summary: 'Получить всех пользователей, role: admin' })
-   @ApiBearerAuth()
+   @ApiBearerAuth('access-token')
    @Get('/')
    all(@Headers() headers) {
-      return this.client.send({ cmd: 'users_all' }, { accessToken: headers.authorization?.split(' ')[1] });
+      return this.userService.all(headers.authorization?.split(' ')[1])
    }
 }

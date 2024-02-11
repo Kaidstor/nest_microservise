@@ -3,14 +3,14 @@ import { User } from "src/entities/user.entity";
 
 const config: TypeOrmModuleOptions = {
    type: 'mysql',
-   host: 'db_users',
   //  host: 'localhost',
-   port: 3306,
-   username: 'root',
-   password: 'example',
-   database: 'user',
+   host: process.env.HOST, 
+   port: +process.env.PORT,
+   username: process.env.USERNAME,
+   password: process.env.PASSWORD,
+   database: process.env.DATABASE,
    entities: [User],
    synchronize: true,
  }
 
- export default config 
+ export default config
