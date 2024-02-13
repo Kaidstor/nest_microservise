@@ -44,7 +44,10 @@ export class CommentService {
       return await this.commentRepository.delete(id);
    }
 
-   async findByUserId(userId: number) {
+   async findByUserId(id: number, role: string, userId: number ) {
+      if (id != userId && role != 'admin')
+         throw new ForbiddenException('No permission');
+
       return await this.commentRepository.find({ where: { userId } });
    }
 }

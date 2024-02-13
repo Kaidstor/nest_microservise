@@ -20,7 +20,7 @@ export class CommentService {
       return await lastValueFrom(this.clientComment.send({ cmd: 'delete_comment' }, { userId, role, id }));
    }
 
-   all(userId: number) {
-      return this.clientComment.send({ cmd: 'user_comments' }, { userId });
+   async all(id: number, userId: number, role: string) {
+      return this.clientComment.send({ cmd: 'user_comments' }, { id, userId, role });
    }
 }

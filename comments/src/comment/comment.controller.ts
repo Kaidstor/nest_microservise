@@ -24,7 +24,7 @@ export class CommentController {
    }
 
    @MessagePattern({ cmd: 'user_comments' })
-   async getUserComments(@Payload() user: { userId: number, role: string }) {
-      return await this.commentService.findByUserId(user.userId);
+   async getUserComments(@Payload() payload: { id: number, userId: number, role: string }) {
+      return await this.commentService.findByUserId(payload.id, payload.role, payload.userId);
    }
 }

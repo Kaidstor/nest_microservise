@@ -40,8 +40,9 @@ export class CommentController {
 
    @ApiBearerAuth('access-token')
    @ApiParam({ name: 'id', required: true, description: 'Уникальный идентификатор пользователя', type: String })
+   @UseGuards(AuthorizationGuard)
    @Get('/user/:id')
    all(@Request() req: AuthReqData, @Param('id') id: string) {
-      return this.commentService.all(+id);
+      return this.commentService.all(+id, req.user.id, req.user.role);
    }
 }
